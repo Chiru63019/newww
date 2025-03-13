@@ -1142,3 +1142,19 @@ async def split_and_upload_file(app, sender, target_chat_id, file_path, caption,
 
     await start.delete()
     os.remove(file_path)
+
+async def send_media_message(app, target_chat_id, msg, caption, topic_id):
+     try:
+         modified_caption = (caption or "") + "\n\nSpecial thanks @skillwithchiru , @chiru52 ,🙈\n\nꕶ𝚔𝚒𝚕𝚕𝚠𝚒𝚝𝚑 🅲🅷🅸🆁🆄 🖤\n"
+         
+         if msg.video:
+             return await app.send_video(target_chat_id, msg.video.file_id, caption=modified_caption, reply_to_message_id=topic_id)
+         if msg.document:
+             return await app.send_document(target_chat_id, msg.document.file_id, caption=modified_caption, reply_to_message_id=topic_id)
+         if msg.photo:
+             return await app.send_photo(target_chat_id, msg.photo.file_id, caption=modified_caption, reply_to_message_id=topic_id)
+     except Exception as e:
+         print(f"Error while sending media: {e}")
+     
+     # Fallback to copy_message in case of any exceptions
+     return await app.copy_message(target_chat_id, msg.chat.id, msg.id, reply_to_message_id=topic_id)
